@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="hu">
+  <head>
+    <meta charset="utf-8" />
+    <title>UrbanOtto_F9XAIU</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+      }
+      .adatok {
+        width: 300px;
+        float: left;
+        position: absolute;
+      }
+      .funkciok {
+        float: right;
+        position: relative;
+      }
+      .sc {
+        position: relative;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="adatok">
+      <h2><b>SZEMÉLYES ADATOK:</b></h2>
+      <p><b>NÉV: URBÁN OTTÓ</b></p>
+      <p><b>NEPTUN AZONOSITÓ: F9XAIU</b></p>
+      <p><b>SZAK: MÉRNÖKINFORMATIKUS</b></p>
+      <p><b>AKTUÁLIS TANÉV: 2021 ŐSZI FÉLÉV</b></p>
+    </div>
+    <div class="funkciok">
+      <h2><b>FUNKCIÓK:</b></h2>
+      <p><b>I. FUNKCIÓ: DUPLAKATTINTÁS - NAPSZAK VÁLTÁS</b></p>
+      <p><b>II. FUNKCIÓ: SPACE TARTÁSA - VONAT MOZGÁSÁNAK ANIMÁCIÓJA</b></p>
+    </div>
+    <div class="sc">
+      <script type="module">
+        import * as THREE from "./js-r132/build/three.module.js";
+        import { OBJLoader } from "./js-r132/examples/jsm/loaders/OBJLoader.js";
+        import { MTLLoader } from "./js-r132/examples/jsm/loaders/MTLLoader.js";
+        import { OrbitControls } from "./js-r132/examples/jsm/controls/OrbitControls.js";
+
+        // Nagyon sok random szám van benne ... Ne nyisd le...
+
+        let random_array = [
+          { x: -40, z: -28 },
+          { x: -1, z: -30 },
+          { x: 8, z: -29 },
+          { x: 15, z: 39 },
+          { x: -18, z: -7 },
+          { x: -14, z: -22 },
+          { x: -33, z: 28 },
+          { x: 18, z: -20 },
+          { x: -19, z: -53 },
+          { x: 26, z: 40 },
+          { x: 44, z: 12 },
+          { x: 49, z: -32 },
+          { x: 9, z: -1 },
+          { x: -1, z: 2 },
+          { x: -13, z: 23 },
+          { x: 58, z: -55 },
+          { x: -66, z: 16 },
+          { x: 17, z: -3 },
+          { x: 41, z: -16 },
+          { x: -30, z: 41 },
+          { x: -17, z: -36 },
+          { x: 38, z: 35 },
+          { x: 60, z: 42 },
+          { x: -26, z: 46 },
+          { x: -47, z: 9 },
+          { x: -2, z: -55 },
+          { x: -25, z: -6 },
+          { x: -5, z: 11 },
+          { x: -28, z: -54 },
+          { x: 33, z: -43 },
+          { x: -12, z: 10 },
+          { x: 10, z: 42 },
+          { x: 63, z: -4 },
+          { x: 11, z: -16 },
+          { x: 34, z: 9 },
+          { x: 59, z: 5 },
+          { x: 11, z: -32 },
+          { x: 62, z: 38 },
+          { x: -21, z: 48 },
+          { x: 22, z: -31 },
+          { x: 15, z: 41 },
+          { x: -34, z: 38 },
+          { x: 51, z: 1 },
+          { x: 12, z: -29 },
+          { x: -4, z: -45 },
+          { x: -1, z: -58 },
+          { x: 59, z: -39 },
+          { x: 30, z: 25 },
+          { x: -6, z: -30 },
+          { x: 25, z: -45 },
+          { x: 0, z: -25 },
+          { x: 14, z: 46 },
+          { x: 62, z: -38 },
+          { x: 37, z: -24 },
+          { x: -10, z: 3 },
+          { x: 27, z: -31 },
+          { x: 23, z: -43 },
+          { x: 10, z: -38 },
+          { x: -3, z: 1 },
+          { x: -56, z: -56 },
+          { x: 50, z: 22 },
+          { x: -65, z: 49 },
+          { x: 18, z: -50 },
+          { x: 13, z: 47 },
+          { x: 5, z: -27 },
+          { x: -10, z: -36 },
+          { x: -27, z: -54 },
+          { x: 16, z: 21 },
+          { x: 46, z: -13 },
+          { x: 56, z: -29 },
+          { x: -74, z: 6 },
+          { x: -24, z: 23 },
+          { x: -64, z: -20 },
+          { x: 4, z: 37 },
+          { x: 39, z: -32 },
+          { x: -6, z: 21 },
+          { x: -12, z: 43 },
+          { x: -40, z: -61 },
+          { x: -30, z: -48 },
+          { x: 22, z: -55 },
+          { x: -53, z: -27 },
+          { x: 2, z: -46 },
+          { x: 16, z: -50 },
+          { x: -45, z: 38 },
+          { x: 0, z: -11 },
+          { x: -42, z: -28 },
+          { x: -63, z: -14 },
+          { x: -68, z: 3 },
+          { x: -21, z: -42 },
+          { x: 10, z: 2 },
+          { x: 43, z: 27 },
+          { x: -18, z: -6 },
+          { x: 45, z: 14 },
+          { x: 39, z: 7 },
+          { x: 54, z: 42 },
+          { x: -36, z: -50 },
+          { x: 14, z: -16 },
+          { x: -20, z: -58 },
+          { x: -45, z: -37 },
+          { x: -60, z: 16 },
+          { x: -59, z: 5 },
+          { x: -48, z: -51 },
+          { x: 51, z: -48 },
+          { x: -76, z: -58 },
+          { x: -34, z: -1 },
+          { x: -4, z: 51 },
+          { x: -46, z: 32 },
+          { x: 38, z: -41 },
+          { x: -26, z: -40 },
+          { x: -9, z: 36 },
+          { x: 0, z: -17 },
+          { x: -25, z: -2 },
+          { x: 40, z: -61 },
+          { x: -75, z: -39 },
+          { x: 25, z: -62 },
+          { x: 1, z: 8 },
+          { x: 63, z: -13 },
+          { x: -22, z: 5 },
+          { x: -49, z: 26 },
+          { x: 61, z: -11 },
+          { x: 33, z: -36 },
+          { x: 23, z: -15 },
+          { x: 62, z: 14 },
+          { x: 6, z: -9 },
+          { x: 22, z: -55 },
+          { x: 21, z: -51 },
+          { x: 40, z: 40 },
+          { x: 63, z: 51 },
+          { x: 28, z: -58 },
+          { x: -45, z: 31 },
+          { x: 53, z: 48 },
+          { x: -49, z: -10 },
+          { x: -53, z: 12 },
+          { x: 31, z: 49 },
+          { x: 60, z: -52 },
+          { x: 62, z: 9 },
+          { x: 60, z: -3 },
+          { x: -49, z: -50 },
+          { x: -73, z: -19 },
+          { x: 21, z: -40 },
+          { x: -46, z: 48 },
+          { x: 13, z: -62 },
+          { x: 18, z: 31 },
+          { x: -65, z: -48 },
+          { x: -36, z: 24 },
+          { x: 44, z: -11 },
+          { x: 44, z: -24 },
+          { x: -51, z: -22 },
+          { x: 55, z: 6 },
+          { x: 63, z: 35 },
+          { x: -65, z: 42 },
+          { x: -59, z: -53 },
+          { x: 13, z: -3 },
+          { x: -56, z: 29 },
+          { x: 37, z: 5 },
+          { x: -11, z: -15 },
+          { x: -26, z: 22 },
+          { x: 58, z: 11 },
+          { x: 48, z: -52 },
+          { x: 39, z: -55 },
+          { x: -22, z: 0 },
+          { x: -64, z: -4 },
+          { x: 48, z: -58 },
+          { x: -52, z: -29 },
+          { x: -72, z: -31 },
+          { x: 11, z: -38 },
+          { x: -59, z: 3 },
+          { x: 5, z: -54 },
+          { x: -68, z: 29 },
+          { x: -68, z: 16 },
+          { x: -3, z: -52 },
+          { x: 52, z: 12 },
+          { x: -55, z: 5 },
+          { x: -11, z: -45 },
+          { x: 6, z: 48 },
+          { x: -22, z: 15 },
+          { x: 19, z: -25 },
+          { x: 51, z: 48 },
+          { x: -17, z: 33 },
+          { x: -67, z: -51 },
+          { x: 36, z: -50 },
+          { x: -33, z: -21 },
+          { x: 59, z: -13 },
+          { x: 58, z: 13 },
+          { x: -30, z: -55 },
+          { x: 6, z: -34 },
+          { x: -63, z: -35 },
+          { x: -76, z: -24 },
+          { x: -72, z: -47 },
+          { x: 28, z: 4 },
+          { x: -28, z: -27 },
+          { x: -2, z: 28 },
+          { x: -5, z: -7 },
+          { x: 29, z: -24 },
+          { x: 38, z: -13 },
+          { x: -2, z: 49 },
+          { x: -28, z: -54 },
+          { x: 4, z: 0 },
+          { x: -75, z: -26 },
+          { x: 31, z: -7 },
+        ];
+
+        // Globális változók
+        var WIDTH, HEIGHT, aspectRatio;
+        var scene, camera, sceenGroup;
+        var house;
+        var renderer;
+
+        // Gombnyomás számláló.
+        var counter;
+
+        // Nappal vagy éjszaka ?
+        var isNight = false;
+
+        var lightAmbient;
+        var pointLight;
+
+        var controls;
+        var train_road_angle = THREE.MathUtils.radToDeg(1);
+
+        // Környezeti elemek
+        var terrain;
+        var pine_trees = [];
+        var houses = [];
+        var stones = [];
+        var dark_stones = [];
+        var train;
+        var mixer;
+        var trail;
+        var tower;
+        var mutato;
+        var kismutato;
+
+        // Animációk
+
+        var animate1;
+
+        // Fények
+        var light1;
+        var plight2;
+        var plight3;
+        var plight4;
+
+        terrain_loader();
+
+        function terrain_loader() {
+          new MTLLoader().load("3D_objects/Terrain.mtl", function (materials) {
+            materials.preload();
+            new OBJLoader()
+              .setMaterials(materials)
+              .load("3D_objects/Terrain.obj", function (object) {
+                terrain = object;
+                console.log(object);
+
+                object.traverse(function (child) {
+                  if (child instanceof THREE.Mesh) {
+                    child.scale.set(4, 4, 4);
+                    child.receiveShadow = true;
+                  }
+                });
+
+                house_loader();
+              });
+          });
+        }
+
+        function house_loader() {
+          new MTLLoader().load("3D_objects/LiLHouse.mtl", function (materials) {
+            materials.preload();
+            new OBJLoader()
+              .setMaterials(materials)
+              .load("3D_objects/LiLHouse.obj", function (object) {
+                house = object;
+                for (let i = 0; i < 3; i++) {
+                  houses[i] = object.clone();
+                }
+                object.traverse(function (child) {
+                  if (child instanceof THREE.Mesh) {
+                    child.castShadow = true;
+                  }
+                });
+
+                pine_tree_loader();
+              });
+          });
+        }
+
+        function pine_tree_loader() {
+          new MTLLoader().load(
+            "3D_objects/Pine_tree.mtl",
+            function (materials) {
+              materials.preload();
+              new OBJLoader()
+                .setMaterials(materials)
+                .load("3D_objects/Pine_tree.obj", function (object) {
+                  for (let i = 0; i < 15; i++) {
+                    pine_trees[i] = object.clone();
+                  }
+
+                  object.traverse(function (child) {
+                    if (child instanceof THREE.Mesh) {
+                      child.receiveShadow = true;
+                    }
+                  });
+
+                  stone_loader();
+                });
+            }
+          );
+        }
+
+        function stone_loader() {
+          new MTLLoader().load("3D_objects/Stone.mtl", function (materials) {
+            materials.preload();
+            new OBJLoader()
+              .setMaterials(materials)
+              .load("3D_objects/Stone.obj", function (object) {
+                for (let i = 0; i < 25; i++) {
+                  stones[i] = object.clone();
+                  stones[i].position.set(
+                    random_array[i].x,
+                    0.7,
+                    random_array[i].z
+                  );
+                  stones[i].rotation.set(0, random_array[i].x, 0);
+                  if (i < 10) {
+                    stones[i].scale.set(0.5, 0.5, 0.5);
+                  }
+                  if (i > 10 && i < 20) {
+                    stones[i].scale.set(1, 1, 1);
+                  }
+                  if (i > 20 && i < 25) {
+                    stones[i].scale.set(1.7, 1.5, 1.5);
+                  }
+                }
+
+                object.traverse(function (child) {
+                  if (child instanceof THREE.Mesh) {
+                    child.receiveShadow = true;
+                  }
+                });
+
+                darker_stone_loader();
+              });
+          });
+        }
+
+        function darker_stone_loader() {
+          new MTLLoader().load(
+            "3D_objects/Stone_dark.mtl",
+            function (materials) {
+              materials.preload();
+              new OBJLoader()
+                .setMaterials(materials)
+                .load("3D_objects/Stone_dark.obj", function (object) {
+                  for (let i = 0; i < 25; i++) {
+                    dark_stones[i] = object.clone();
+                    dark_stones[i].position.set(
+                      random_array[i + 50].x,
+                      0.7,
+                      random_array[i + 50].z
+                    );
+                    dark_stones[i].rotation.set(0, random_array[i + 50].x, 0);
+                    if (i < 10) {
+                      dark_stones[i].scale.set(0.2, 0.2, 0.2);
+                    }
+                    if (i > 10 && i < 20) {
+                      dark_stones[i].scale.set(0.5, 0.5, 0.5);
+                    }
+                    if (i > 20 && i < 25) {
+                      dark_stones[i].scale.set(0.7, 0.7, 0.7);
+                    }
+                  }
+
+                  object.traverse(function (child) {
+                    if (child instanceof THREE.Mesh) {
+                      child.receiveShadow = true;
+                    }
+                  });
+
+                  train_loader();
+                });
+            }
+          );
+        }
+
+        function train_loader() {
+          new MTLLoader().load("3D_objects/Train.mtl", function (materials) {
+            materials.preload();
+            new OBJLoader()
+              .setMaterials(materials)
+              .load("3D_objects/Train.obj", function (object) {
+                train = object;
+                console.log(object);
+
+                object.traverse(function (child) {
+                  if (child instanceof THREE.Mesh) {
+                    child.receiveShadow = true;
+                  }
+                });
+
+                trail_loader();
+              });
+          });
+        }
+
+        function trail_loader() {
+          new MTLLoader().load("3D_objects/Trail.mtl", function (materials) {
+            materials.preload();
+            new OBJLoader()
+              .setMaterials(materials)
+              .load("3D_objects/Trail.obj", function (object) {
+                trail = object;
+                console.log(object);
+
+                object.traverse(function (child) {
+                  if (child instanceof THREE.Mesh) {
+                    child.scale.set(0.97, 0.5, 0.97);
+                    child.receiveShadow = true;
+                  }
+                });
+
+                tower_loader();
+              });
+          });
+        }
+
+        function tower_loader() {
+          new MTLLoader().load("3D_objects/tower.mtl", function (materials) {
+            materials.preload();
+            new OBJLoader()
+              .setMaterials(materials)
+              .load("3D_objects/tower.obj", function (object) {
+                tower = object;
+                console.log(object);
+
+                object.traverse(function (child) {
+                  if (child instanceof THREE.Mesh) {
+                    child.scale.set(4, 4, 4);
+                    child.receiveShadow = true;
+                  }
+                });
+
+                mutato_loader();
+              });
+          });
+        }
+
+        function mutato_loader() {
+          new MTLLoader().load("3D_objects/Mutato.mtl", function (materials) {
+            materials.preload();
+            new OBJLoader()
+              .setMaterials(materials)
+              .load("3D_objects/Mutato.obj", function (object) {
+                mutato = object.clone();
+                kismutato = object.clone();
+
+                object.traverse(function (child) {
+                  if (child instanceof THREE.Mesh) {
+                    child.receiveShadow = true;
+                  }
+                });
+
+                init();
+              });
+          });
+        }
+
+        function init() {
+          // Böngésző ablakméret lekérése és méretarány számítása
+          HEIGHT = window.innerHeight;
+          WIDTH = window.innerWidth;
+          aspectRatio = WIDTH / HEIGHT;
+
+          // Színtér létrehozása
+          scene = new THREE.Scene();
+          sceenGroup = new THREE.Group();
+
+          renderer = new THREE.WebGLRenderer({ antialias: true });
+          renderer.setSize(WIDTH, HEIGHT);
+          renderer.setClearColor(0xfffff0);
+          renderer.shadowMap.enabled = true;
+          document.body.appendChild(renderer.domElement);
+
+          // Kamera beállítása
+          camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
+          camera.position.set(130, 60, 80);
+
+          // Talaj rész hozzáadása.
+          sceenGroup.add(terrain);
+
+          // Fák pozícionálása és testreszabása
+
+          pine_trees[0].position.set(-50, 1, -50);
+          pine_trees[0].scale.set(5, 5, 5);
+          pine_trees[1].position.set(-55, 1, -45);
+          pine_trees[1].scale.set(4, 4, 5);
+          pine_trees[2].position.set(-30, 1, -40);
+          pine_trees[2].scale.set(5, 6, 5);
+          pine_trees[3].position.set(30, 1, -40);
+          pine_trees[3].scale.set(3, 3, 3);
+          pine_trees[4].position.set(20, 1, -36);
+          pine_trees[4].scale.set(3, 4, 3);
+          pine_trees[5].position.set(60, 1, 60);
+          pine_trees[5].scale.set(5, 6, 5);
+          pine_trees[6].position.set(40, 1, -50);
+          pine_trees[6].scale.set(4, 4, 4);
+          pine_trees[7].position.set(40, 1, 35);
+          pine_trees[7].scale.set(4, 4, 4);
+          pine_trees[8].position.set(24, 1, 60);
+          pine_trees[8].scale.set(4, 4, 4);
+          pine_trees[9].position.set(33, 1, 55);
+          pine_trees[9].scale.set(3, 4, 3);
+
+          //Házak hozzáadása
+
+          houses[0].position.set(40, 1, -40);
+          houses[1].position.set(41, 1, -30);
+          houses[1].rotation.y = 0.5;
+          houses[1].scale.set(0.8, 0.8, 0.8);
+
+          // Toronyóra mutatója
+
+          mutato.position.set(4.15, 20, 0);
+          mutato.scale.set(1, 1, 1);
+          kismutato.position.set(4.15, 20, 0);
+          kismutato.scale.set(1, 0.6, 1);
+
+          sceenGroup.add(mutato);
+          sceenGroup.add(kismutato);
+
+          // Toronyóra hozzáadása
+          tower.position.set(0, 1, 0);
+
+          plight2 = new THREE.PointLight(0xfceea7, 0, 10);
+          plight2.position.set(6, 20, 0);
+          sceenGroup.add(plight2);
+          sceenGroup.add(tower);
+
+          // Vasút hozzáadása
+          trail.position.set(0, 2, 0);
+          sceenGroup.add(trail);
+
+          // Vonat hozzáadása
+          train.position.set(0, 3, 0);
+
+          var radians = train_road_angle * (Math.PI / 180);
+          train.position.x = Math.cos(radians) * 45;
+          train.position.z = Math.sin(radians) * 45;
+          train.rotation.y = (train_road_angle - 180) * -(Math.PI / 180);
+
+          sceenGroup.add(train);
+
+          // Fák hozzáadása
+          sceenGroup.add(pine_trees[0]);
+          sceenGroup.add(pine_trees[1]);
+          sceenGroup.add(pine_trees[2]);
+          sceenGroup.add(pine_trees[3]);
+          sceenGroup.add(pine_trees[4]);
+          sceenGroup.add(pine_trees[5]);
+          sceenGroup.add(pine_trees[6]);
+          sceenGroup.add(pine_trees[7]);
+          sceenGroup.add(pine_trees[8]);
+          sceenGroup.add(pine_trees[9]);
+          sceenGroup.add(houses[0]);
+          sceenGroup.add(houses[1]);
+
+          // Kövek hozzáadása
+          for (let i = 0; i < 25; i++) {
+            sceenGroup.add(stones[i]);
+          }
+          for (let i = 0; i < 25; i++) {
+            sceenGroup.add(dark_stones[i]);
+          }
+
+          // Fények
+          lightAmbient = new THREE.AmbientLight(0xfffff0, 1.4);
+          pointLight = new THREE.PointLight(0xfffff0, 1);
+          pointLight.position.set(10, 100, 25);
+
+          scene.add(lightAmbient);
+          scene.add(pointLight);
+
+          scene.add(sceenGroup);
+
+          window.addEventListener("resize", handleWindowResize, false);
+          window.addEventListener("keydown", function () {
+            if (counter == 0) {
+              train_animation();
+            }
+            counter++;
+          });
+          window.addEventListener("keyup", function () {
+            cancelAnimationFrame(animate1);
+            counter = 0;
+          });
+          window.addEventListener("dblclick", function () {
+            morning_or_night();
+          });
+
+          controls = new OrbitControls(camera, renderer.domElement);
+
+          clock_rotate();
+          animate();
+        }
+
+        function handleWindowResize() {
+          HEIGHT = window.innerHeight;
+          WIDTH = window.innerWidth;
+          renderer.setSize(WIDTH, HEIGHT);
+          camera.aspect = WIDTH / HEIGHT;
+          camera.updateProjectionMatrix();
+
+          render();
+        }
+
+        function animate() {
+          controls.update();
+          requestAnimationFrame(animate);
+          render();
+        }
+
+        function clock_rotate() {
+          mutato.rotation.x -= THREE.MathUtils.degToRad(1);
+          kismutato.rotation.x -= THREE.MathUtils.degToRad(0.1);
+          requestAnimationFrame(clock_rotate);
+          render();
+        }
+
+        // Éjszakából nappal , nappalból éjszaka...
+        function morning_or_night() {
+          if (!isNight) {
+            if (lightAmbient.intensity > 0) {
+              lightAmbient.intensity -= 0.005;
+              plight2.intensity += 0.01;
+              requestAnimationFrame(morning_or_night);
+            } else {
+              isNight = !isNight;
+              cancelAnimationFrame(requestAnimationFrame(morning_or_night));
+            }
+          } else {
+            if (lightAmbient.intensity < 1.4) {
+              lightAmbient.intensity += 0.005;
+              plight2.intensity -= 0.01;
+              requestAnimationFrame(morning_or_night);
+            } else {
+              isNight = !isNight;
+              cancelAnimationFrame(requestAnimationFrame(morning_or_night));
+            }
+          }
+        }
+
+        function render() {
+          renderer.render(scene, camera);
+        }
+
+        function train_animation() {
+          train_road_angle -= 0.5;
+          var radians = train_road_angle * (Math.PI / 180);
+          train.position.x = Math.cos(radians) * 45;
+          train.position.z = Math.sin(radians) * 45;
+          train.rotation.y = (train_road_angle - 180) * -(Math.PI / 180);
+
+          animate1 = requestAnimationFrame(train_animation);
+          render();
+        }
+
+        function toggle() {}
+      </script>
+    </div>
+  </body>
+</html>
